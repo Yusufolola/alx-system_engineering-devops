@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#this prints best school 10x
+
+for idx in {1..10}
+do 
+	echo "Best School"
+done

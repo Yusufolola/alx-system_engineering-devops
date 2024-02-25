@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#this prints best school 10x
+
+idx=1
+until [ $idx -gt 10 ] 
+do
+	echo "Best School"
+	((idx++))
+done
