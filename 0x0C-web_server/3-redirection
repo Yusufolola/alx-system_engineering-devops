@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# installing ngix and configuring
+
+sudo apt-get update
+sudo apt-get install -y  nginx
+sudo ufw "Nginx HTTP"
+sudo mkdir -p /var/www/html
+sudo touch /var/www/html/index.html
+sudo echo "Hello World!" > /var/www/html/index.html
+sudo cat << EOF > /etc/nginx/sites-available/default
+server { 
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	root /var/www/html;
+	index index.html;
+	location /redirect_me {
+		return 301 https://www.google.com;
+	}
+}
+EOF
+
+sudo service nginx restart
+
+
