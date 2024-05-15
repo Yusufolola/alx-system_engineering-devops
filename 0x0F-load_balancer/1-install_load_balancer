@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#installing an haproxy load balancer
+
+sudo apt -y update
+sudo apt-get -y install haproxy
+
+config=\
+"frontend yusuf-frontend
+	bind *:80
+	mode http
+	default_backend yusuf-backend
+
+backend yusuf-backend
+	balance roundrobin
+	server web-01 34.207.64.82:80 check
+	server web-02 100.27.5.215:80 check
+"
+
+echo "$config" | sudo tee -a /etc/haproxy/haproxy.cfg
+echo "ENABLED=1" | sudo tee -a /etc/default/haproxy
+
+sudo service haproxy restart

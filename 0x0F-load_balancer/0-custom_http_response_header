@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# installing ngix and configuring err 404 page
+
+sudo apt-get update
+sudo apt-get install -y  nginx
+#sudo ufw Allow "Nginx HTTP"
+sudo service nginx restart
+sudo mkdir -p /var/www/errors
+sudo touch /var/www/errors/custom_404.html
+sudo echo "Ceci n'est pas une page" | sudo tee /var/www/errors/custom_404.html
+sudo touch /var/www/html/index.html
+sudo echo "Hello World!" | sudo tee /var/www/html/index.html
+sudo tee /etc/nginx/sites-available/default <<EOF
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        root /var/www/html;
+	add_header X-Served-By "$(hostname)";
+        index index.html;
+        location /redirect_me {
+                return 301 https://www.google.com;
+        }
+        error_page 404 /custom_404.html;
+        location = /custom_404.html {
+                root /var/www/errors/;
+                internal;
+        }
+}
+EOF
+sudo nginx -t
+sudo service nginx restart
+~                          
